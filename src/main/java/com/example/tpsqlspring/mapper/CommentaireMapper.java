@@ -3,6 +3,8 @@ package com.example.tpsqlspring.mapper;
 import com.example.tpsqlspring.dto.CommentaireDTO;
 import com.example.tpsqlspring.entity.Commentaire;
 import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class CommentaireMapper {
@@ -16,6 +18,7 @@ public class CommentaireMapper {
         dto.setContenu(commentaire.getContenu());
         dto.setEmail(commentaire.getEmail());
         dto.setNom(commentaire.getNom());
+        dto.setDateCreation(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         return dto;
     }
 
