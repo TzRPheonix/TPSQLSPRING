@@ -1,7 +1,10 @@
 package com.example.tpsqlspring.controller;
 
+import com.example.tpsqlspring.dto.CommentaireDTO;
 import com.example.tpsqlspring.dto.PostDTO;
+import com.example.tpsqlspring.entity.Commentaire;
 import com.example.tpsqlspring.entity.Post;
+import com.example.tpsqlspring.mapper.CommentaireMapper;
 import com.example.tpsqlspring.mapper.PostMapper;
 import com.example.tpsqlspring.service.PostService;
 import jakarta.validation.Valid;
@@ -22,6 +25,28 @@ public class PostController {
 
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private CommentaireMapper commentaireMapper;
+
+    @GetMapping("/{postId}/comments")
+    public List<CommentaireDTO> getAllCommentsByPostId(@PathVariable("postId") Long postId) {
+        List<Commentaire> commentaires = postService.getAllCommentsByPostId(postId);
+        return commentaires.stream()
+                .map(commentaire -> commentaireMapper.toDTO(commentaire))
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/{postId}/comments")
+    public ResponseEntity<CommentaireDTO> addCommentToPost(@PathVariable("postId") Long postId, @Valid @RequestBody CommentaireDTO commentaireDTO) {
+        Commentaire commentaire = commentaireMapper.toEntity(commentaireDTO);
+        Commentaire addedComment = postService.addCommentToPost(postId, commentaire);
+        if (addedComment != null) {
+            return ResponseEntity.ok(commentaireMapper.toDTO(addedComment));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping
     public List<PostDTO> getAllPosts() {

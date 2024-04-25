@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentaireDTO {
-
     private Long id;
     private String contenu;
     private String email;

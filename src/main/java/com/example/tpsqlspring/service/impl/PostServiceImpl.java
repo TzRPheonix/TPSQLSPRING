@@ -51,4 +51,20 @@ public class PostServiceImpl implements PostService {
 
         return "Post deleted successfully";
     }
+
+    @Override
+    public List<Commentaire> getAllCommentsByPostId(Long postId) {
+        return commentaireRepository.findAllByPostId(postId);
+    }
+
+    @Override
+    public Commentaire addCommentToPost(Long postId, Commentaire commentaire) {
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post != null) {
+            commentaire.setPost(post);
+            return commentaireRepository.save(commentaire);
+        } else {
+            return null;
+        }
+    }
 }
