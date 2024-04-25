@@ -4,6 +4,7 @@ import com.example.tpsqlspring.dto.PostDTO;
 import com.example.tpsqlspring.entity.Post;
 import com.example.tpsqlspring.mapper.PostMapper;
 import com.example.tpsqlspring.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,14 +42,14 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable Long id, @RequestBody PostDTO postDTO) {
+    public ResponseEntity<PostDTO> updatePost(@PathVariable Long id, @Valid @RequestBody PostDTO postDTO) {
         Post post = postMapper.toEntity(postDTO);
         Post updatedPost = postService.update(id, post);
         return ResponseEntity.ok(postMapper.toDTO(updatedPost));
     }
 
     @PostMapping
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postDTO) {
         Post post = postMapper.toEntity(postDTO);
         try {
             return ResponseEntity.ok(postMapper.toDTO(postService.save(post)));
